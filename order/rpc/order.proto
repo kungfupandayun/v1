@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package order;
+
+option go_package = "/rpc;orderrpc";
+
+//import "product/rpc/product.proto";
+
+// Order a customer order.
+message Order {
+
+    // Unique identifier of the order.
+    string id = 1;
+    // Customer first and last names
+    message Customer{
+        string first_name = 1;
+        string last_name = 2;
+    }
+    Customer c = 2;
+    
+
+    
+    // Shipping address
+    message ShippingAddress{
+        string address = 1;
+        string postal_code = 2;
+        string city = 3;
+        string country = 4;
+    }
+    ShippingAddress addr = 3;
+
+    // Product and its quantities
+    message ProductQuantity{
+        string pid = 1;
+        int32 quantity = 2;
+    }
+    repeated ProductQuantity prod_quant = 4;
+    
+}
+
+
+service Service {
+    // Fetch all existing orders in the system.
+    rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
+
+    // Create a new Order
+    rpc CreateOrder(Order) returns (CreateOrderResponse);
+}
+
+message CreateOrderResponse {}
+
+message ListOrdersRequest {}
+
+message ListOrdersResponse {
+    repeated Order orders = 1;
+}
